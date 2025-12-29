@@ -14,11 +14,14 @@ import FoodCard from '../components/foods/FoodCard';
 import Link from 'next/link';
 
 const dummyFoods = [
- { id: '1', name: 'Pizza', description: 'Cheesy goodness with your favorite toppings.', price: 12 },
-  { id: '2', name: 'Burger', description: 'Juicy patty loaded with fresh veggies.', price: 10 },
-  { id: '3', name: 'Pasta', description: 'Classic Italian comfort food.', price: 11 },
-  { id: '4', name: 'Sushi', description: 'Fresh rolled bites of seafood and rice.', price: 14.99 },
-  { id: '5', name: 'Salad', description: 'Crisp greens with zesty dressing.', price: 7.99 },
+ { id: '1', name: 'Pizza', label:'Food',description: 'Cheesy goodness with your favorite toppings.', price: 12 },
+  { id: '2', name: 'Burger', label:'Food', description: 'Juicy patty loaded with fresh veggies.', price: 10 },
+  { id: '3', name: 'Pasta', label:'Food', description: 'Classic Italian comfort food.', price: 11 },
+  { id: '4', name: 'Sushi', label:'Food', description: 'Fresh rolled bites of seafood and rice.', price: 14.99 },
+  { id: '5', name: 'Ramen', label:'Food', description: 'Crisp greens with zesty dressing.', price: 7.99 },
+  { id: '6', name: 'Soup', label:'Food', description: 'Crisp greens with zesty dressing.', price: 7.99 },
+  { id: '7', name: 'Rice ball', label:'Food', description: 'Crisp greens with zesty dressing.', price: 7.99 },
+  { id: '8', name: 'Pista', label:'Food', description: 'Crisp greens with zesty dressing.', price: 7.99 },
 ];
 
 export default function FoodsPage() {
@@ -36,7 +39,7 @@ export default function FoodsPage() {
         </Link>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
         {foods.map((food) => (
           <FoodCard key={food.id} food={food} />
         ))}
