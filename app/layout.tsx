@@ -1,6 +1,8 @@
 // app/layout.tsx
 import Script from "next/script";
 import "./globals.css";
+import Footer from "./components/Footer";
+import Header from "./components/header";
 
 export default function RootLayout({
   children,
@@ -9,11 +11,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <header style={{ padding: 16, background: "#eee" }}>
-          <h2>🍔 Food App</h2>
-        </header>
-        <main style={{ padding: 16 }}>{children}</main>
+      <body className="min-h-screen flex flex-col">
+         <Header />
+          <main className="app-shell__main flex-grow">{children}</main>
+        <Footer />
         <Script
     id="ms-clarity"
     strategy="afterInteractive"
