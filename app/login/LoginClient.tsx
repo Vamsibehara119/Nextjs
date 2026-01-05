@@ -47,7 +47,7 @@ export default function LoginClient() {
           type="submit"
           className="btn w-full"
         >
-          Login"
+          Login
         </button>
       </form>
     </div>
