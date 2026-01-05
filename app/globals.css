@@ -50,3 +50,54 @@ body {
   padding: 24px;
   background: rgba(255, 255, 255, 0.85);
 }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+
+  background: #111827;          /* near-black */
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+  transition: 
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* Hover = confidence, not chaos */
+.btn:hover {
+  background: #000000;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  cursor:pointer;
+}
+
+/* Active = tactile feedback */
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Focus = accessibility, not decoration */
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(251, 197, 49, 0.6);
+}
+
+/* Disabled = clearly unavailable */
+.btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

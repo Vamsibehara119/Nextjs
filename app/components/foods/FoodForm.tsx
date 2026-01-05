@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import clsx from 'clsx';
-
+import "../../globals.css"
 export type Food = {
   id: string;
   name: string;
@@ -94,7 +94,7 @@ export default function FoodForm({ mode, initialValues, foodId, onSubmitSuccess 
         type="submit"
         disabled={isSubmitting}
         className={clsx(
-          'w-full rounded-md px-4 py-2 text-sm font-medium text-white transition',
+          'btn w-full',
           isSubmitting ? 'bg-emerald-400' : 'bg-emerald-600 hover:bg-emerald-500'
         )}
       >

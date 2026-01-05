@@ -1,4 +1,15 @@
-export default function Header() {
+import { cookies } from "next/headers"
+import Link from "next/link"
+export default async function Header() {
+  const cookieStore =await cookies()
+  const auth = cookieStore.get("auth")?.value
+  const role = cookieStore.get("role")?.value
+
+  const href =
+    auth && role === "admin" ? "/food" : "/login"
+
+  const label =
+    auth ? "Foods" : "Login"
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-gradient-to-r from-orange-50 via-white to-orange-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -29,14 +40,14 @@ export default function Header() {
             Add Food
           </a>
 
-          <a
-            href="/login"
-            className="px-5 py-2 rounded-full bg-orange-500 text-white font-semibold
-                       shadow-md hover:shadow-xl hover:bg-orange-600
-                       transform hover:-translate-y-0.5 transition-all duration-300"
-          >
-            Login
-          </a>
+         <Link
+      href={href}
+      className="px-5 py-2 rounded-full bg-orange-500 text-white font-semibold
+                 shadow-md hover:shadow-xl hover:bg-orange-600
+                 transform hover:-translate-y-0.5 transition-all duration-300"
+    >
+      {label}
+    </Link>
 
         </nav>
 

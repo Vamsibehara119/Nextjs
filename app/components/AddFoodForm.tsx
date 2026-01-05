@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { useState } from "react";
-
+import "../../globals.css"
 const addFoodSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters long"),
   description: z
@@ -230,7 +230,7 @@ export default function AddFoodForm() {
 
         <button
           type="submit"
-          className="rounded bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+          className="btn w-full"
           disabled={formik.isSubmitting}
         >
           {formik.isSubmitting ? "Saving…" : "Add Food"}
