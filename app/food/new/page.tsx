@@ -13,7 +13,7 @@ export default function CreateFoodPage() {
   return (
     <section className="px-6 py-8">
       <div className="mx-auto max-w-2xl space-y-8 rounded-lg bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-semibold">Create Food</h1>
+        <h1 className="text-2xl font-semibold text-black">Create Food</h1>
         <FoodForm mode="create" onSubmitSuccess={handleFoodAdd} />
 
         <div>

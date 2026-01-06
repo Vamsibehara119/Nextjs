@@ -1,8 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import clsx from 'clsx';
-import "../../globals.css"
+import { useFormik } from "formik";
+import { z } from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import clsx from "clsx";
+import "../../globals.css";
+
 export type Food = {
   id: string;
   name: string;
@@ -11,94 +14,116 @@ export type Food = {
 };
 
 type FoodFormProps = {
-  mode: 'create' | 'edit';
-  initialValues?: Omit<Food, 'id'>;
+  mode: "create" | "edit";
+  initialValues?: Omit<Food, "id">;
   foodId?: string;
   onSubmitSuccess?: (food: Food) => void;
 };
 
-const defaultValues: Omit<Food, 'id'> = {
-  name: '',
-  description: '',
+const foodSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  description: z
+    .string()
+    .min(10, "Description must be at least 10 characters"),
+  price: z.number().min(1, "Price must be at least 1"),
+});
+
+type FoodFormValues = z.infer<typeof foodSchema>;
+
+const defaultValues: FoodFormValues = {
+  name: "",
+  description: "",
   price: 0,
 };
 
-export default function FoodForm({ mode, initialValues, foodId, onSubmitSuccess }: FoodFormProps) {
-  const [values, setValues] = useState(initialValues ?? defaultValues);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export default function FoodForm({
+  mode,
+  initialValues,
+  foodId,
+  onSubmitSuccess,
+}: FoodFormProps) {
+  const submitLabel = mode === "create" ? "Create" : "Save Changes";
 
-  const submitLabel = mode === 'create' ? 'Create' : 'Save Changes';
+  const formik = useFormik<FoodFormValues>({
+    initialValues: initialValues ?? defaultValues,
+    validationSchema: toFormikValidationSchema(foodSchema),
+    onSubmit: async (values, helpers) => {
+      const payload: Food = {
+        id: foodId ?? crypto.randomUUID(),
+        ...values,
+      };
 
-  function handleChange<K extends keyof Omit<Food, 'id'>>(key: K, value: Omit<Food, 'id'>[K]) {
-    setValues((prev) => ({ ...prev, [key]: value }));
-  }
+      await new Promise((r) => setTimeout(r, 500)); // simulate API
+      onSubmitSuccess?.(payload);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setIsSubmitting(true);
+      helpers.setSubmitting(false);
+      if (mode === "create") helpers.resetForm();
+    },
+  });
 
-    const payload: Food = {
-      id: foodId ?? crypto.randomUUID(),
-      ...values,
-    };
-
-    onSubmitSuccess?.(payload);
-    setIsSubmitting(false);
-
-    if (mode === 'create') {
-      setValues(defaultValues);
-    }
-  }
+  const error = (field: keyof FoodFormValues) =>
+    formik.touched[field] && formik.errors[field] ? (
+      <p className="text-sm text-red-600">{formik.errors[field]}</p>
+    ) : null;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={formik.handleSubmit} className="space-y-4">
       {/* Name */}
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">Name</label>
+        <label className="form-label">Name</label>
         <input
+          name="name"
           type="text"
-          value={values.name}
-          onChange={(e) => handleChange('name', e.target.value)}
-          className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
-          required
+          className="form-input"
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
+        {error("name")}
       </div>
 
       {/* Description */}
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">Description</label>
+        <label className="form-label">Description</label>
         <textarea
-          value={values.description}
-          onChange={(e) => handleChange('description', e.target.value)}
-          className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+          name="description"
           rows={4}
-          required
+          className="form-input"
+          value={formik.values.description}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
+        {error("description")}
       </div>
 
       {/* Price */}
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">Price</label>
+        <label className="form-label">Price</label>
         <input
+          name="price"
           type="number"
-          min={0}
           step="0.01"
-          value={values.price}
-          onChange={(e) => handleChange('price', Number(e.target.value))}
-          className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100"
-          required
+          className="form-input"
+          value={formik.values.price}
+          onChange={(e) =>
+            formik.setFieldValue("price", Number(e.target.value))
+          }
+          onBlur={formik.handleBlur}
         />
+        {error("price")}
       </div>
 
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={formik.isSubmitting}
         className={clsx(
-          'btn w-full',
-          isSubmitting ? 'bg-emerald-400' : 'bg-emerald-600 hover:bg-emerald-500'
+          "btn w-full",
+          formik.isSubmitting
+            ? "bg-emerald-400"
+            : "bg-emerald-600 hover:bg-emerald-500"
         )}
       >
-        {isSubmitting ? 'Submitting…' : submitLabel}
+        {formik.isSubmitting ? "Submitting…" : submitLabel}
       </button>
     </form>
   );
