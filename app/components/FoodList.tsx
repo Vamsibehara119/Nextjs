@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getFoods, Food } from "../lib/food-api";
 import ErrorBoundary from "./ErrorBoundary";
 import FoodItem from "./FoodItem";
-import "../../globals.css"
+import "../globals.css"
 function FoodListContent() {
   const [foods, setFoods] = useState<Food[]>([]);
   const [error, setError] = useState<Error | null>(null);

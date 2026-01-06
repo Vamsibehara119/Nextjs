@@ -21,13 +21,35 @@ type FoodFormProps = {
 };
 
 const foodSchema = z.object({
-  name: z.string().trim().min(2, "Name must be at least 2 characters"),
-  description: z
-    .string()
-    .trim()
-    .min(10, "Description must be at least 10 characters"),
-  price: z.number().min(1, "Price must be greater than 0"),
+  name: z.preprocess(
+    (val) => (val === undefined || val === null ? "" : val),
+    z
+      .string()
+      .trim()
+      .min(2, "Name must be at least 2 characters")
+  ),
+
+  description: z.preprocess(
+    (val) => (val === undefined || val === null ? "" : val),
+    z
+      .string()
+      .trim()
+      .min(10, "Description must be at least 10 characters")
+  ),
+
+  price: z.preprocess(
+    (val) => {
+      if (val === "" || val === undefined || val === null) return NaN;
+      return Number(val);
+    },
+    z
+      .number({
+        message: "Price must be a number",
+      })
+      .min(1, "Price must be greater than 0")
+  ),
 });
+
 
 type FoodFormValues = z.infer<typeof foodSchema>;
 
