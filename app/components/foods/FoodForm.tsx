@@ -21,11 +21,12 @@ type FoodFormProps = {
 };
 
 const foodSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z.string().trim().min(2, "Name must be at least 2 characters"),
   description: z
     .string()
+    .trim()
     .min(10, "Description must be at least 10 characters"),
-  price: z.number().min(1, "Price must be at least 1"),
+  price: z.number().min(1, "Price must be greater than 0"),
 });
 
 type FoodFormValues = z.infer<typeof foodSchema>;
@@ -53,7 +54,7 @@ export default function FoodForm({
         ...values,
       };
 
-      await new Promise((r) => setTimeout(r, 500)); // simulate API
+      await new Promise((r) => setTimeout(r, 500));
       onSubmitSuccess?.(payload);
 
       helpers.setSubmitting(false);
@@ -63,68 +64,75 @@ export default function FoodForm({
 
   const error = (field: keyof FoodFormValues) =>
     formik.touched[field] && formik.errors[field] ? (
-      <p className="text-sm text-red-600">{formik.errors[field]}</p>
+      <p className="mt-1 text-sm text-red-600">{formik.errors[field]}</p>
     ) : null;
 
   return (
-    <form onSubmit={formik.handleSubmit} className="space-y-4">
-      {/* Name */}
-      <div>
-        <label className="form-label">Name</label>
-        <input
-          name="name"
-          type="text"
-          className="form-input"
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {error("name")}
-      </div>
-
-      {/* Description */}
-      <div>
-        <label className="form-label">Description</label>
-        <textarea
-          name="description"
-          rows={4}
-          className="form-input"
-          value={formik.values.description}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {error("description")}
-      </div>
-
-      {/* Price */}
-      <div>
-        <label className="form-label">Price</label>
-        <input
-          name="price"
-          type="number"
-          step="0.01"
-          className="form-input"
-          value={formik.values.price}
-          onChange={(e) =>
-            formik.setFieldValue("price", Number(e.target.value))
-          }
-          onBlur={formik.handleBlur}
-        />
-        {error("price")}
-      </div>
-
-      <button
-        type="submit"
-        disabled={formik.isSubmitting}
-        className={clsx(
-          "btn w-full",
-          formik.isSubmitting
-            ? "bg-emerald-400"
-            : "bg-emerald-600 hover:bg-emerald-500"
-        )}
+    <div className="mx-auto w-full max-w-md sm:max-w-lg px-4 sm:px-6">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="space-y-4 sm:space-y-5"
       >
-        {formik.isSubmitting ? "Submitting…" : submitLabel}
-      </button>
-    </form>
+        {/* Name */}
+        <div>
+          <label className="form-label text-sm sm:text-base">Name</label>
+          <input
+            name="name"
+            type="text"
+            className="form-input"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {error("name")}
+        </div>
+
+        {/* Description */}
+        <div>
+          <label className="form-label text-sm sm:text-base">
+            Description
+          </label>
+          <textarea
+            name="description"
+            rows={4}
+            className="form-input"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {error("description")}
+        </div>
+
+        {/* Price */}
+        <div>
+          <label className="form-label text-sm sm:text-base">Price</label>
+          <input
+            name="price"
+            type="number"
+            step="0.01"
+            className="form-input"
+            value={formik.values.price || ""}
+            onChange={(e) =>
+              formik.setFieldValue("price", Number(e.target.value))
+            }
+            onBlur={formik.handleBlur}
+          />
+          {error("price")}
+        </div>
+
+        <button
+          type="submit"
+          disabled={formik.isSubmitting}
+          className={clsx(
+            "btn w-full py-3 text-sm sm:text-base",
+            formik.isSubmitting
+              ? "bg-emerald-400"
+              : "bg-emerald-600 hover:bg-emerald-500"
+          )}
+        >
+          {formik.isSubmitting ? "Submitting…" : submitLabel}
+        </button>
+      </form>
+    </div>
   );
 }
