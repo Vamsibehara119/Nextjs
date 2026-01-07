@@ -14,7 +14,6 @@ type FoodCardProps = {
 export default function FoodCard({ food }: FoodCardProps) {
   return (
     <article className="rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-      {/* <img src={food.imageUrl} alt={food.name} className="h-52 w-full rounded-t-2xl object-cover" /> */}
       <div className="space-y-3 p-4">
         <div className="flex items-center justify-between">
           <div className="flex flex-col sm:flex flex-row items-center gap-2">

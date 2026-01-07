@@ -36,6 +36,12 @@
   .form-label {
     @apply mb-1 block text-sm font-medium text-gray-700;
   }
+
+  .center-text
+  {
+    @apply flex justify-center py-10 text-gray-500 text-center;
+  }
+
 }
 
 body {
