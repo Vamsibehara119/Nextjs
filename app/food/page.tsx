@@ -14,20 +14,28 @@ export default function FoodsPage() {
   }
   const [foods,setFoods]=useState<Food[]>([]);
   const [loading,setLoading]=useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
 
-useEffect(() => {
-  const fetchFood = async () => {
-    try {
-      const res = await fetch("http://localhost:3000/api/foods");
-      const data = await res.json();
-      setFoods(data.data);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchFood = async () => {
+      try {
+        const res = await fetch("/api/foods");
+        const data = await res.json();
+        setFoods(data.data);
+      } catch (e: any) {
+        setError(new Error("API failed"));
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchFood();
-}, []);
+    fetchFood();
+  }, []);
+
+  // ‼️ throw DURING render — React boundary catches this
+  if (error) {
+    throw error;
+  }
   return (
     <section className="space-y-6 px-6 py-8">
       <div className="flex items-center justify-between">
