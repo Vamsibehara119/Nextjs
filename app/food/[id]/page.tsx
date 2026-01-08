@@ -12,6 +12,9 @@ const seededFoods: Food[] = [
   { id: '3', name: 'Pasta', description: 'Classic Italian comfort food.', price: 11 },
   { id: '4', name: 'Sushi', description: 'Fresh rolled bites of seafood and rice.', price: 14.99 },
   { id: '5', name: 'Salad', description: 'Crisp greens with zesty dressing.', price: 7.99 },
+  { id: '6', name: 'Soup',  description: 'Crisp greens with zesty dressing.', price: 7.99 },
+  { id: '7', name: 'Rice ball', description: 'Crisp greens with zesty dressing.', price: 7.99 },
+  { id: '8', name: 'Pista', description: 'Crisp greens with zesty dressing.', price: 7.99 }
 ];
 
 export default function EditFoodPage({ params }: Props) {

@@ -1,6 +1,8 @@
 "use client";
 import { useEffect,useState } from 'react';
 import FoodCard from '../components/foods/FoodCard';
+// import ErrorBoundary from '@/ErrorBoundary/ErrorBoundary';
+// import FallbackUI from '@/ErrorBoundary/FallbackUI';
 import Link from 'next/link';
 import "../globals.css";
 export default function FoodsPage() {
@@ -62,6 +64,7 @@ export default function FoodsPage() {
           )}
 
           {/* List */}
+          {/* <ErrorBoundary fallback={<FallbackUI area="Failed to load food items." />}> */}
           {!loading && foods.length > 0 && (
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
               {foods.map((food) => (
@@ -69,7 +72,7 @@ export default function FoodsPage() {
               ))}
             </div>
           )}
-
+          {/* </ErrorBoundary> */}
     </section>
   );
 }
