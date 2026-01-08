@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { getFoods, Food } from "../lib/food-api";
-import ErrorBoundary from "./ErrorBoundary";
+import ErrorBoundary from "../../ErrorBoundary/ErrorBoundary";
 import FoodItem from "./FoodItem";
 import "../globals.css"
+import FallbackUI from "@/ErrorBoundary/FallbackUI";
 function FoodListContent() {
   const [foods, setFoods] = useState<Food[]>([]);
   const [error, setError] = useState<Error | null>(null);
@@ -32,13 +33,7 @@ function FoodListContent() {
 export default function FoodList() {
   return (
     <ErrorBoundary
-      fallback={(error, reset) => (
-        <div style={{ color: "red" }}>
-          <h3>Food data failed ❌</h3>
-          <p>{error.message}</p>
-          <button onClick={reset} className="btn">Retry</button>
-        </div>
-      )}
+      fallback={<FallbackUI area="Food List" />}
     >
       <FoodListContent />
     </ErrorBoundary>
