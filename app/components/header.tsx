@@ -10,7 +10,7 @@ export default async function Header() {
   const label = auth ? "Foods" : "Login";
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-gradient-to-r from-orange-50 via-white to-orange-50 shadow-lg">
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-linear-to-r from-orange-50 via-white to-orange-50 shadow-lg">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
 
