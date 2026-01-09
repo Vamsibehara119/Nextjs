@@ -11,6 +11,7 @@ export type Food = {
   name: string;
   description: string;
   price: number;
+  category?:string
 };
 
 type FoodFormProps = {
@@ -23,18 +24,12 @@ type FoodFormProps = {
 const foodSchema = z.object({
   name: z.preprocess(
     (val) => (val === undefined || val === null ? "" : val),
-    z
-      .string()
-      .trim()
-      .min(2, "Name must be at least 2 characters")
+    z.string().trim().min(2, "Name must be at least 2 characters")
   ),
 
   description: z.preprocess(
     (val) => (val === undefined || val === null ? "" : val),
-    z
-      .string()
-      .trim()
-      .min(10, "Description must be at least 10 characters")
+    z.string().trim().min(10, "Description must be at least 10 characters")
   ),
 
   price: z.preprocess(
@@ -42,12 +37,10 @@ const foodSchema = z.object({
       if (val === "" || val === undefined || val === null) return NaN;
       return Number(val);
     },
-    z
-      .number({
-        message: "Price must be a number",
-      })
-      .min(1, "Price must be greater than 0")
+    z.number({ message: "Price must be a number" }).min(1, "Price must be greater than 0")
   ),
+
+  category: z.string().optional(),   // <—— OPTIONAL FIELD
 });
 
 
@@ -57,6 +50,7 @@ const defaultValues: FoodFormValues = {
   name: "",
   description: "",
   price: 0,
+  category:"",
 };
 
 export default function FoodForm({
@@ -84,6 +78,19 @@ export default function FoodForm({
     },
   });
 
+  const inputClass = (field: keyof FoodFormValues) =>
+  clsx(
+    "form-input",
+    formik.touched[field] &&
+      formik.errors[field] &&
+      "input-error",
+    formik.touched[field] &&
+      !formik.errors[field] &&
+      "input-success"
+  );
+ 
+ 
+
   const error = (field: keyof FoodFormValues) =>
     formik.touched[field] && formik.errors[field] ? (
       <p className="mt-1 text-sm text-red-600">{formik.errors[field]}</p>
@@ -97,11 +104,13 @@ export default function FoodForm({
       >
         {/* Name */}
         <div>
-          <label className="form-label text-sm sm:text-base">Name</label>
+          <label className="form-label text-sm sm:text-base">
+            Name <span className="text-red-600">*</span>
+            </label>
           <input
             name="name"
             type="text"
-            className="form-input"
+            className={inputClass("name")}
             value={formik.values.name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -112,12 +121,12 @@ export default function FoodForm({
         {/* Description */}
         <div>
           <label className="form-label text-sm sm:text-base">
-            Description
+            Description <span className="text-red-600">*</span>
           </label>
           <textarea
             name="description"
             rows={4}
-            className="form-input"
+             className={inputClass("description")}
             value={formik.values.description}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -127,12 +136,14 @@ export default function FoodForm({
 
         {/* Price */}
         <div>
-          <label className="form-label text-sm sm:text-base">Price</label>
+          <label className="form-label text-sm sm:text-base">
+            Price <span className="text-red-600">*</span>
+          </label>
           <input
             name="price"
             type="number"
             step="0.01"
-            className="form-input"
+             className={inputClass("price")}
             value={formik.values.price || ""}
             onChange={(e) =>
               formik.setFieldValue("price", Number(e.target.value))
@@ -141,7 +152,19 @@ export default function FoodForm({
           />
           {error("price")}
         </div>
-
+            <div>
+            <label className="form-label text-sm sm:text-base">
+              Category <span className="text-gray-500">(optional)</span>
+            </label>
+            <input
+              name="category"
+              type="text"
+              className={inputClass("category")}
+              value={formik.values.category || ""}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+          </div>
         <button
           type="submit"
           disabled={formik.isSubmitting}
