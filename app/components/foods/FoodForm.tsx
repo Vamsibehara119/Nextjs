@@ -141,13 +141,10 @@ export default function FoodForm({
           </label>
           <input
             name="price"
-            type="number"
-            step="0.01"
+            type="text"
              className={inputClass("price")}
             value={formik.values.price || ""}
-            onChange={(e) =>
-              formik.setFieldValue("price", Number(e.target.value))
-            }
+            onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
           {error("price")}
