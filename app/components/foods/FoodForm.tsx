@@ -84,6 +84,18 @@ export default function FoodForm({
     },
   });
 
+  const inputClass = (field: keyof FoodFormValues) =>
+  clsx(
+    "form-input",
+    formik.touched[field] &&
+      formik.errors[field] &&
+      "input-error",
+    formik.touched[field] &&
+      !formik.errors[field] &&
+      "input-success"
+  );
+
+
   const error = (field: keyof FoodFormValues) =>
     formik.touched[field] && formik.errors[field] ? (
       <p className="mt-1 text-sm text-red-600">{formik.errors[field]}</p>
@@ -101,7 +113,7 @@ export default function FoodForm({
           <input
             name="name"
             type="text"
-            className="form-input"
+            className={inputClass("name")}
             value={formik.values.name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -117,7 +129,7 @@ export default function FoodForm({
           <textarea
             name="description"
             rows={4}
-            className="form-input"
+            className={inputClass("description")}
             value={formik.values.description}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -132,7 +144,7 @@ export default function FoodForm({
             name="price"
             type="number"
             step="0.01"
-            className="form-input"
+            className={inputClass("price")}
             value={formik.values.price || ""}
             onChange={(e) =>
               formik.setFieldValue("price", Number(e.target.value))

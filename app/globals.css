@@ -11,6 +11,19 @@
     --foreground: #ededed;
   }
 }
+  /* ❌ Invalid Field */
+  .input-error {
+    @apply border-red-500 bg-red-100
+           focus:border-red-500
+           focus:ring-red-200;
+  }
+
+  /* ✅ Valid Field */
+  .input-success {
+    @apply border-green-500 bg-green-100
+           focus:border-green-500
+           focus:ring-green-200;
+  }
 
 @layer utilities {
   .btn {
